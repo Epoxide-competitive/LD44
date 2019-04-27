@@ -19,8 +19,8 @@ public class RenderWorld {
     public void render(SpriteBatch batch, World world) {
         TileMap tileMap = world.getTileMaps()[0];
 
-        float width = Math.round(Gdx.graphics.getWidth() / TILE_SIZE);
-        float height = Math.round(Gdx.graphics.getHeight() / TILE_SIZE);
+        float width = Gdx.graphics.getWidth() / TILE_SIZE;
+        float height = Gdx.graphics.getHeight() / TILE_SIZE;
 
         float offsetWidth = width / 2.0f - 0.5f;
         float offsetHeight = height / 2.0f - 0.5f;
@@ -28,7 +28,7 @@ public class RenderWorld {
         batch.begin();
         for (int x = 0; x < tileMap.getWidth(); x++) {
             for (int y = 0; y < tileMap.getHeight(); y++) {
-                this.renderTile.getQuads(tileMap.getTile(x, y)).render(batch, (x + LD44.entityPlayer.getX() + offsetWidth) * TILE_SIZE, (y + LD44.entityPlayer.getY() + offsetHeight) * TILE_SIZE, TILE_SIZE);
+                this.renderTile.getQuads(tileMap.getTile(x, y)).render(batch, (x - LD44.entityPlayer.getX() + offsetWidth) * TILE_SIZE, (y - LD44.entityPlayer.getY() + offsetHeight) * TILE_SIZE, TILE_SIZE);
             }
         }
         batch.end();

@@ -58,12 +58,12 @@ public class LD44 extends ApplicationAdapter {
         this.batch.setProjectionMatrix(camera.combined);
         this.renderWorld.render(this.batch, entityPlayer.getWorld());
 
-        Gdx.gl.glLineWidth(2);
+        Gdx.gl.glLineWidth(4);
         debugRenderer.setProjectionMatrix(this.camera.combined);
         debugRenderer.begin(ShapeRenderer.ShapeType.Line);
         debugRenderer.setColor(Color.WHITE);
-        debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f-1, Gdx.graphics.getHeight() / 2.0f - 20.0f), new Vector2(Gdx.graphics.getWidth() / 2.0f-1, Gdx.graphics.getHeight() / 2.0f + 20.0f));
-        debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f - 20.0f, Gdx.graphics.getHeight() / 2.0f-1), new Vector2(Gdx.graphics.getWidth() / 2.0f + 20.0f, Gdx.graphics.getHeight() / 2.0f-1));
+        debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f - 2f, Gdx.graphics.getHeight() / 2.0f - 20.0f), new Vector2(Gdx.graphics.getWidth() / 2.0f - 2f, Gdx.graphics.getHeight() / 2.0f + 20.0f));
+        debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f - 20.0f, Gdx.graphics.getHeight() / 2.0f - 2f), new Vector2(Gdx.graphics.getWidth() / 2.0f + 20.0f, Gdx.graphics.getHeight() / 2.0f - 2f));
         debugRenderer.end();
         Gdx.gl.glLineWidth(1);
 
@@ -97,7 +97,7 @@ public class LD44 extends ApplicationAdapter {
     public void resetCamera() {
         final float w = Gdx.graphics.getWidth();
         final float h = Gdx.graphics.getHeight();
-        this.camera.setToOrtho(true, w, h);
+        this.camera.setToOrtho(true, w + 0.5f, h + 0.5f);
         this.camera.update();
     }
 
