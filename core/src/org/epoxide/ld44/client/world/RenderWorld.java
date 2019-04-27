@@ -28,7 +28,7 @@ public class RenderWorld {
         batch.begin();
         for (int x = 0; x < tileMap.getWidth(); x++) {
             for (int y = 0; y < tileMap.getHeight(); y++) {
-                this.renderTile.getQuads(tileMap.getTile(x, y)).render(batch, (x - LD44.entityPlayer.getX() + offsetWidth) * TILE_SIZE, (y - LD44.entityPlayer.getY() + offsetHeight) * TILE_SIZE, TILE_SIZE);
+                tileMap.getTile(x, y).getQuad(x, y).render(batch, (x - LD44.entityPlayer.getX() + offsetWidth) * TILE_SIZE, (y - LD44.entityPlayer.getY() + offsetHeight) * TILE_SIZE, TILE_SIZE);
             }
         }
         batch.end();
