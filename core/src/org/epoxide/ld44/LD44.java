@@ -62,8 +62,8 @@ public class LD44 extends ApplicationAdapter {
         debugRenderer.setProjectionMatrix(this.camera.combined);
         debugRenderer.begin(ShapeRenderer.ShapeType.Line);
         debugRenderer.setColor(Color.WHITE);
-        debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f, Gdx.graphics.getHeight() / 2.0f - 20.0f), new Vector2(Gdx.graphics.getWidth() / 2.0f, Gdx.graphics.getHeight() / 2.0f + 20.0f));
-        debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f - 20.0f, Gdx.graphics.getHeight() / 2.0f), new Vector2(Gdx.graphics.getWidth() / 2.0f + 20.0f, Gdx.graphics.getHeight() / 2.0f));
+        debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f-1, Gdx.graphics.getHeight() / 2.0f - 20.0f), new Vector2(Gdx.graphics.getWidth() / 2.0f-1, Gdx.graphics.getHeight() / 2.0f + 20.0f));
+        debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f - 20.0f, Gdx.graphics.getHeight() / 2.0f-1), new Vector2(Gdx.graphics.getWidth() / 2.0f + 20.0f, Gdx.graphics.getHeight() / 2.0f-1));
         debugRenderer.end();
         Gdx.gl.glLineWidth(1);
 
