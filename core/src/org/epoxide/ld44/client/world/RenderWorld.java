@@ -19,8 +19,8 @@ public class RenderWorld {
     public void render(SpriteBatch batch, World world) {
         TileMap tileMap = world.getTileMaps()[0];
 
-        float width = Gdx.graphics.getWidth() / TILE_SIZE;
-        float height = Gdx.graphics.getHeight() / TILE_SIZE;
+        float width = Math.round(Gdx.graphics.getWidth() / TILE_SIZE);
+        float height = Math.round(Gdx.graphics.getHeight() / TILE_SIZE);
 
         float offsetWidth = width / 2.0f - 0.5f;
         float offsetHeight = height / 2.0f - 0.5f;
