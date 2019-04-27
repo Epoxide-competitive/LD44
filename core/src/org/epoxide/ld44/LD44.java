@@ -26,6 +26,7 @@ public class LD44 extends ApplicationAdapter {
     private OrthographicCamera camera;
     private float renderDelta = 0f;
     private RenderWorld renderWorld;
+    private ShapeRenderer debugRenderer;
 
     @Override
     public void create() {
@@ -44,12 +45,12 @@ public class LD44 extends ApplicationAdapter {
         // Creates the OrthographicCamera
         this.camera = new OrthographicCamera();
         resetCamera();
+        
+        debugRenderer = new ShapeRenderer();
     }
-
-
+    
     @Override
     public void render() {
-        ShapeRenderer debugRenderer = new ShapeRenderer();
 
         this.renderDelta = Gdx.graphics.getDeltaTime() * 1000f;
         Gdx.gl.glClearColor(0, 0, 0, 1);
