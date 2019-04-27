@@ -6,22 +6,22 @@ package org.epoxide.ld44.registry;
  * logic, extend from this class.
  */
 public class Registerable<T> implements IRegisterable<T> {
-
+    
     /**
      * The identifier for the registerable object.
      */
     private Identifier identifier;
-
+    
     @Override
     public T setIdentifier (Identifier identifier) {
-
+        
         this.identifier = identifier;
         return (T) this;
     }
-
+    
     @Override
     public Identifier getIdentifier () {
-
+        
         return this.identifier;
     }
 }
