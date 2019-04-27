@@ -10,7 +10,7 @@ public class Town extends World {
     private IBounty[] bounties;
 
     public Town() {
-        super(1, 150, 150);
+        super(1, 5, 5);
         this.generateBounties();
         this.generate();
     }

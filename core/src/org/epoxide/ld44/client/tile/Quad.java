@@ -16,9 +16,9 @@ public class Quad {
         this.texture = texture;
 
         final float u1 = texture.getU();
-        final float v1 = texture.getV2();
+        final float v1 = texture.getV();
         final float u2 = texture.getU2();
-        final float v2 = texture.getV();
+        final float v2 = texture.getV2();
 
         this.vertices[U1] = u1;
         this.vertices[V1] = v1;
