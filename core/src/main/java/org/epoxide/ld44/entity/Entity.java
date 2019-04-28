@@ -16,6 +16,8 @@ public class Entity {
     private int floor;
     
     private float speed;
+    
+    private int attack;
 
     public Entity(String iD) {
 
@@ -31,6 +33,16 @@ public class Entity {
 
     }
 
+    public void attackTarget(Entity target) {
+        
+        target.receiveDamage(this, this.getAttack());
+    }
+    
+    public void receiveDamage(Entity source, int amount) {
+        
+        this.health -= amount;
+    }
+    
     public int getMaxHealth() {
         return maxHealth;
     }
@@ -93,5 +105,15 @@ public class Entity {
     public void setSpeed (float speed) {
         
         this.speed = speed;
+    }
+
+    public int getAttack () {
+        
+        return attack;
+    }
+
+    public void setAttack (int attack) {
+        
+        this.attack = attack;
     }
 }

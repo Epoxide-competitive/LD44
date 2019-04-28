@@ -11,6 +11,8 @@ public class EntityPlayer extends Entity {
         
         super("ld44:player");
         this.inventory = new InventoryBase(7);
+        this.setHealth(10);
+        this.setAttack(4);
         this.setSpeed(25f);
     }
     
