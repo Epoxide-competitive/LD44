@@ -7,13 +7,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.TimeUtils;
+import org.epoxide.ld44.client.gui.Gui;
+import org.epoxide.ld44.client.gui.GuiBountyBoard;
 import org.epoxide.ld44.client.world.RenderWorld;
 import org.epoxide.ld44.entity.EntityPlayer;
 import org.epoxide.ld44.input.InputHandler;
 import org.epoxide.ld44.tile.Tiles;
 import org.epoxide.ld44.utilities.Debug;
 import org.epoxide.ld44.world.Town;
-import org.epoxide.ld44.world.locations.Location;
 
 public class LD44 extends ApplicationAdapter {
 
@@ -26,8 +27,10 @@ public class LD44 extends ApplicationAdapter {
 
     public static double DELTA = 0f;
 
+    public static Gui CURRENT_GUI;
+
     private Town town;
-    private OrthographicCamera camera;
+    public static OrthographicCamera CAMERA;
     private SpriteBatch batch;
     private RenderWorld renderWorld;
 
@@ -40,10 +43,11 @@ public class LD44 extends ApplicationAdapter {
     @Override
     public void create() {
 
-        Location location = new Location(1, 8, 15);
-        location.generate();
-
         Gdx.graphics.setVSync(false);
+
+        FONT = new BitmapFont(Gdx.files.internal("assets/ld44/textures/fonts/pixel_operator.fnt"), true);
+
+        CURRENT_GUI = new GuiBountyBoard();
 
         Tiles.register();
         this.renderWorld = new RenderWorld();
@@ -51,17 +55,16 @@ public class LD44 extends ApplicationAdapter {
         this.batch = new SpriteBatch();
         this.town = new Town();
         ENTITYPLAYER = new EntityPlayer();
-        ENTITYPLAYER.setWorld(location);
+        ENTITYPLAYER.setWorld(this.town);
 
-        FONT = new BitmapFont(Gdx.files.internal("assets/ld44/textures/fonts/pixel_operator.fnt"), true);
-
-        this.camera = new OrthographicCamera();
+        CAMERA = new OrthographicCamera();
         resetCamera();
 
         Gdx.input.setInputProcessor(new InputHandler());
     }
 
     public void updateLogic(double delta) {
+
         ENTITYPLAYER.update(delta);
     }
 
@@ -83,12 +86,15 @@ public class LD44 extends ApplicationAdapter {
 
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        this.camera.update();
-        this.batch.setProjectionMatrix(camera.combined);
+        CAMERA.update();
+        this.batch.setProjectionMatrix(CAMERA.combined);
         this.renderWorld.render(this.batch, ENTITYPLAYER.getTileMap());
 
-        this.debug.drawCrosshair(this.camera);
+        this.debug.drawCrosshair();
         this.debug.drawDebugStats(this.batch);
+
+        if (CURRENT_GUI != null)
+            CURRENT_GUI.render(this.batch);
     }
 
 
@@ -100,8 +106,8 @@ public class LD44 extends ApplicationAdapter {
     public void resetCamera() {
         final float w = Gdx.graphics.getWidth();
         final float h = Gdx.graphics.getHeight();
-        this.camera.setToOrtho(true, w + 0.5f, h + 0.5f);
-        this.camera.update();
+        CAMERA.setToOrtho(true, w + 0.5f, h + 0.5f);
+        CAMERA.update();
     }
 
     @Override

@@ -2,7 +2,6 @@ package org.epoxide.ld44.utilities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -27,9 +26,9 @@ public class Debug {
         return debugInfo;
     }
 
-    public void drawCrosshair(OrthographicCamera camera) {
+    public void drawCrosshair() {
         Gdx.gl.glLineWidth(4);
-        debugRenderer.setProjectionMatrix(camera.combined);
+        debugRenderer.setProjectionMatrix(LD44.CAMERA.combined);
         debugRenderer.begin(ShapeRenderer.ShapeType.Line);
         debugRenderer.setColor(Color.WHITE);
         debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f - 2f, Gdx.graphics.getHeight() / 2.0f - 32.0f), new Vector2(Gdx.graphics.getWidth() / 2.0f - 2f, Gdx.graphics.getHeight() / 2.0f + 32.0f));

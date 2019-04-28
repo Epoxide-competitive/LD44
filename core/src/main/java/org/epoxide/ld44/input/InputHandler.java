@@ -16,7 +16,9 @@ public class InputHandler extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (LD44.EDITOR) {
+        if (LD44.CURRENT_GUI != null) {
+            LD44.CURRENT_GUI.touchDown(screenX, screenY, pointer, button);
+        } else if (LD44.EDITOR) {
             TileMap tileMap = LD44.ENTITYPLAYER.getTileMap();
             float width = Gdx.graphics.getWidth() / TILE_SIZE;
             float height = Gdx.graphics.getHeight() / TILE_SIZE;
@@ -31,11 +33,33 @@ public class InputHandler extends InputAdapter {
                 LD44.EDITOR_Y = y;
             }
         }
-        return super.touchDown(screenX, screenY, pointer, button);
+        return true;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        if (LD44.CURRENT_GUI != null) {
+            LD44.CURRENT_GUI.mouseMoved(screenX, screenY);
+            return true;
+        }
+        return super.mouseMoved(screenX, screenY);
+    }
+
+    @Override
+    public boolean keyDown(int keycode) {
+        if (LD44.CURRENT_GUI != null) {
+            LD44.CURRENT_GUI.keyDown(keycode);
+            return true;
+        }
+        return super.keyDown(keycode);
     }
 
     @Override
     public boolean keyUp(int keycode) {
+        if (LD44.CURRENT_GUI != null) {
+            LD44.CURRENT_GUI.keyUp(keycode);
+            return true;
+        }
         switch (keycode) {
             case Input.Keys.W:
                 LD44.ENTITYPLAYER.setY(LD44.ENTITYPLAYER.getY() - 1);
