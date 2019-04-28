@@ -16,34 +16,34 @@ public class Tile extends Registerable<Tile> {
 
         this.setIdentifier(new Identifier(id));
     }
-    
+
     public void registerTextures(PixmapPacker packer) {
-        
+
         packer.pack(this.getIdentifier().toString(), getTileSpriteData());
     }
-    
+
     private Quad quad;
-    
+
     public void retrieveQuads(TextureAtlas atlas) {
-        
+
         quad = new Quad(atlas.findRegion(this.getIdentifier().toString()));
     }
-    
+
     public Quad getQuad(int x, int y) {
-        
+
         return quad;
     }
-    
+
     private Pixmap getTileSpriteData() {
-        
+
         FileHandle file = Gdx.files.internal("assets/" + this.getIdentifier().getDomain() + "/textures/tiles/" + this.getIdentifier().getName() + ".png");
-        
+
         if (!file.exists()) {
-            
+
             Gdx.app.error("LD44", "Missing sprite: " + file.path());
-            file = Gdx.files.internal("assets/ld44/textures/missing_tile.png");
+            file = Gdx.files.internal("assets/ld44/textures/tiles/missing_tile.png");
         }
-        
+
         return new Pixmap(file);
     }
 }

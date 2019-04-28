@@ -8,9 +8,12 @@ import org.epoxide.ld44.tile.Tiles;
 public class Town extends World {
 
     private IBounty[] bounties;
+    private TileMap tileMap;
 
     public Town() {
-        super(1, 5, 5);
+        super(1);
+        this.tileMap = new TileMap(150, 150);
+
         this.generateBounties();
         this.generate();
     }
@@ -20,12 +23,16 @@ public class Town extends World {
     }
 
     @Override
+    public TileMap getTileMap(int floor) {
+        return this.tileMap;
+    }
+
+    @Override
     public void generate() {
         //TODO layout premade area
 
-        TileMap tileMap = this.getTileMaps()[0];
-        for (int x = 0; x < tileMap.getWidth(); x++)
-            for (int y = 0; y < tileMap.getHeight(); y++)
-                tileMap.setTile(x, y, Tiles.GRASS);
+        for (int x = 0; x < this.tileMap.getWidth(); x++)
+            for (int y = 0; y < this.tileMap.getHeight(); y++)
+                this.tileMap.setTile(x, y, Tiles.GRASS);
     }
 }

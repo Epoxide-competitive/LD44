@@ -10,10 +10,10 @@ public class Tiles {
     public static final Tile STONE_BRICKS = new Tile("ld44:stone_bricks");
     public static final Tile GRASS = new Tile("ld44:grass");
     public static final Tile PATH = new Tile("ld44:path");
-    
-    
-    
-    
+
+
+
+
     public static void register() {
         REGISTRY.registerValue(STONE);
         REGISTRY.registerValue(STONE_BRICKS);

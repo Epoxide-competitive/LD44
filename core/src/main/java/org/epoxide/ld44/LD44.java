@@ -11,18 +11,25 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import org.epoxide.ld44.client.world.RenderWorld;
 import org.epoxide.ld44.entity.EntityPlayer;
+import org.epoxide.ld44.input.InputHandler;
 import org.epoxide.ld44.tile.Tiles;
 import org.epoxide.ld44.world.Town;
+import org.epoxide.ld44.world.locations.Locations;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class LD44 extends ApplicationAdapter {
+
+    public static final boolean EDITOR = true;
+    public static int EDITOR_X;
+    public static int EDITOR_Y;
+
     SpriteBatch batch;
     private BitmapFont font;
 
     private Town town;
-    public static EntityPlayer entityPlayer;
+    public static EntityPlayer ENTITYPLAYER;
     private OrthographicCamera camera;
     private float renderDelta = 0f;
     private RenderWorld renderWorld;
@@ -30,6 +37,9 @@ public class LD44 extends ApplicationAdapter {
 
     @Override
     public void create() {
+        Locations location = new Locations(1, 5, 15);
+        location.generate();
+
         Gdx.graphics.setVSync(false);
 
         Tiles.register();
@@ -37,34 +47,39 @@ public class LD44 extends ApplicationAdapter {
 
         this.batch = new SpriteBatch();
         this.town = new Town();
-        entityPlayer = new EntityPlayer();
-        entityPlayer.setWorld(this.town);
+        ENTITYPLAYER = new EntityPlayer();
+        ENTITYPLAYER.setWorld(location);
 
         this.font = new BitmapFont(true);
 
         // Creates the OrthographicCamera
         this.camera = new OrthographicCamera();
         resetCamera();
-        
+
+
+        Gdx.input.setInputProcessor(new InputHandler());
+
         debugRenderer = new ShapeRenderer();
     }
-    
+
     @Override
     public void render() {
+
+        ENTITYPLAYER.update();
 
         this.renderDelta = Gdx.graphics.getDeltaTime() * 1000f;
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.camera.update();
         this.batch.setProjectionMatrix(camera.combined);
-        this.renderWorld.render(this.batch, entityPlayer.getWorld());
+        this.renderWorld.render(this.batch, ENTITYPLAYER.getTileMap());
 
         Gdx.gl.glLineWidth(4);
         debugRenderer.setProjectionMatrix(this.camera.combined);
         debugRenderer.begin(ShapeRenderer.ShapeType.Line);
         debugRenderer.setColor(Color.WHITE);
-        debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f - 2f, Gdx.graphics.getHeight() / 2.0f - 20.0f), new Vector2(Gdx.graphics.getWidth() / 2.0f - 2f, Gdx.graphics.getHeight() / 2.0f + 20.0f));
-        debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f - 20.0f, Gdx.graphics.getHeight() / 2.0f - 2f), new Vector2(Gdx.graphics.getWidth() / 2.0f + 20.0f, Gdx.graphics.getHeight() / 2.0f - 2f));
+        debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f - 2f, Gdx.graphics.getHeight() / 2.0f - 32.0f), new Vector2(Gdx.graphics.getWidth() / 2.0f - 2f, Gdx.graphics.getHeight() / 2.0f + 32.0f));
+        debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f - 32.0f, Gdx.graphics.getHeight() / 2.0f - 2f), new Vector2(Gdx.graphics.getWidth() / 2.0f + 32.0f, Gdx.graphics.getHeight() / 2.0f - 2f));
         debugRenderer.end();
         Gdx.gl.glLineWidth(1);
 

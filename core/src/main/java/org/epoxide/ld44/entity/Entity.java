@@ -1,18 +1,24 @@
 package org.epoxide.ld44.entity;
 
+import org.epoxide.ld44.tile.TileMap;
 import org.epoxide.ld44.world.World;
 
 public class Entity {
 
-    private int maxHealth;
-    private int health;
+    protected int maxHealth;
+    protected int health;
 
-    private int x;
-    private int y;
+    protected int x;
+    protected int y;
 
     private World world;
+    private int floor;
 
     public Entity() {
+
+    }
+
+    public void update() {
 
     }
 
@@ -54,5 +60,9 @@ public class Entity {
 
     public void setWorld(World world) {
         this.world = world;
+    }
+
+    public TileMap getTileMap() {
+        return this.world.getTileMap(this.floor);
     }
 }

@@ -8,7 +8,7 @@ import org.epoxide.ld44.tile.TileMap;
 import org.epoxide.ld44.world.World;
 
 public class RenderWorld {
-    private final float TILE_SIZE = 64.0f;
+    public static final float TILE_SIZE = 64.0f;
     private final RenderTile renderTile;
 
     public RenderWorld() {
@@ -16,9 +16,7 @@ public class RenderWorld {
         this.renderTile.registerTextures();
     }
 
-    public void render(SpriteBatch batch, World world) {
-        TileMap tileMap = world.getTileMaps()[0];
-
+    public void render(SpriteBatch batch, TileMap tileMap) {
         float width = Gdx.graphics.getWidth() / TILE_SIZE;
         float height = Gdx.graphics.getHeight() / TILE_SIZE;
 
@@ -28,7 +26,10 @@ public class RenderWorld {
         batch.begin();
         for (int x = 0; x < tileMap.getWidth(); x++) {
             for (int y = 0; y < tileMap.getHeight(); y++) {
-                tileMap.getTile(x, y).getQuad(x, y).render(batch, (x - LD44.entityPlayer.getX() + offsetWidth) * TILE_SIZE, (y - LD44.entityPlayer.getY() + offsetHeight) * TILE_SIZE, TILE_SIZE);
+                if (LD44.EDITOR && LD44.EDITOR_X == x && LD44.EDITOR_Y == y)
+                    tileMap.getTile(x, y).getQuad(x, y).render(batch, (x - LD44.ENTITYPLAYER.getX() + offsetWidth) * TILE_SIZE, (y - LD44.ENTITYPLAYER.getY() + offsetHeight) * TILE_SIZE, TILE_SIZE, TILE_SIZE, batch.getColor().LIGHT_GRAY.toFloatBits());
+                else
+                    tileMap.getTile(x, y).getQuad(x, y).render(batch, (x - LD44.ENTITYPLAYER.getX() + offsetWidth) * TILE_SIZE, (y - LD44.ENTITYPLAYER.getY() + offsetHeight) * TILE_SIZE, TILE_SIZE);
             }
         }
         batch.end();
