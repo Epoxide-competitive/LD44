@@ -9,7 +9,9 @@ public class EntityPlayer extends Entity {
     
     public EntityPlayer () {
         
+        super("ld44:player");
         this.inventory = new InventoryBase(7);
+        this.setSpeed(25f);
     }
     
     @Override

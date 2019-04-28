@@ -11,10 +11,12 @@ import org.epoxide.ld44.client.gui.Gui;
 import org.epoxide.ld44.client.gui.GuiBountyBoard;
 import org.epoxide.ld44.client.world.RenderWorld;
 import org.epoxide.ld44.entity.EntityPlayer;
+import org.epoxide.ld44.entity.EntityRat;
 import org.epoxide.ld44.input.InputHandler;
 import org.epoxide.ld44.tile.Tiles;
 import org.epoxide.ld44.utilities.Debug;
 import org.epoxide.ld44.world.Town;
+import org.epoxide.ld44.world.World;
 
 public class LD44 extends ApplicationAdapter {
 
@@ -29,7 +31,7 @@ public class LD44 extends ApplicationAdapter {
 
     public static Gui CURRENT_GUI;
 
-    private Town town;
+    private World currentWorld;
     public static OrthographicCamera CAMERA;
     private SpriteBatch batch;
     private RenderWorld renderWorld;
@@ -53,10 +55,18 @@ public class LD44 extends ApplicationAdapter {
         this.renderWorld = new RenderWorld();
         this.debug = new Debug();
         this.batch = new SpriteBatch();
-        this.town = new Town();
+        this.currentWorld = new Town();
         ENTITYPLAYER = new EntityPlayer();
-        ENTITYPLAYER.setWorld(this.town);
+        ENTITYPLAYER.setWorld(this.currentWorld);
+        this.currentWorld.addEntity(ENTITYPLAYER);
 
+        for (int i = 0; i < 5; i++) {
+            
+            EntityRat rat = new EntityRat();
+            rat.setWorld(this.currentWorld);
+            this.currentWorld.addEntity(rat);
+        }
+        
         CAMERA = new OrthographicCamera();
         resetCamera();
 
@@ -65,7 +75,7 @@ public class LD44 extends ApplicationAdapter {
 
     public void updateLogic(double delta) {
 
-        ENTITYPLAYER.update(delta);
+        this.currentWorld.update(delta);
     }
 
     @Override

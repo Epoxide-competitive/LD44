@@ -5,6 +5,7 @@ import org.epoxide.ld44.world.World;
 
 public class Entity {
 
+    private final String iD;
     protected int maxHealth;
     protected int health;
 
@@ -13,9 +14,17 @@ public class Entity {
 
     private World world;
     private int floor;
+    
+    private float speed;
 
-    public Entity() {
+    public Entity(String iD) {
 
+        this.iD = iD;
+    }
+
+    public String getiD () {
+        
+        return iD;
     }
 
     public void update(double delta) {
@@ -64,5 +73,25 @@ public class Entity {
 
     public TileMap getTileMap() {
         return this.world.getTileMap(this.floor);
+    }
+    
+    public int getFloor () {
+        
+        return floor;
+    }
+
+    public float getSpeed () {
+        
+        return speed;
+    }
+
+    public void setFloor (int floor) {
+        
+        this.floor = floor;
+    }
+
+    public void setSpeed (float speed) {
+        
+        this.speed = speed;
     }
 }
