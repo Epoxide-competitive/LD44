@@ -57,7 +57,7 @@ public class LD44 extends ApplicationAdapter {
         ENTITYPLAYER = new EntityPlayer();
         ENTITYPLAYER.setWorld(location);
 
-        this.font = new BitmapFont(true);
+        this.font = new BitmapFont(Gdx.files.internal("assets/ld44/textures/fonts/pixel_operator.fnt"), true);
 
         // Creates the OrthographicCamera
         this.camera = new OrthographicCamera();
