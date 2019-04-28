@@ -2,24 +2,18 @@ package org.epoxide.ld44;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.TimeUtils;
-
 import org.epoxide.ld44.client.world.RenderWorld;
 import org.epoxide.ld44.entity.EntityPlayer;
 import org.epoxide.ld44.input.InputHandler;
 import org.epoxide.ld44.tile.Tiles;
+import org.epoxide.ld44.utilities.Debug;
 import org.epoxide.ld44.world.Town;
-import org.epoxide.ld44.world.locations.Locations;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.epoxide.ld44.world.locations.Location;
 
 public class LD44 extends ApplicationAdapter {
 
@@ -27,106 +21,76 @@ public class LD44 extends ApplicationAdapter {
     public static int EDITOR_X;
     public static int EDITOR_Y;
 
-    SpriteBatch batch;
-    private BitmapFont font;
+    public static BitmapFont FONT;
+    public static EntityPlayer ENTITYPLAYER;
+
+    public static double DELTA = 0f;
 
     private Town town;
-    public static EntityPlayer ENTITYPLAYER;
     private OrthographicCamera camera;
-    private float renderDelta = 0f;
+    private SpriteBatch batch;
     private RenderWorld renderWorld;
-    private ShapeRenderer debugRenderer;
-    
+
+    private Debug debug;
+
     private static final double STEP = 1d / 20d;
     private double prevTime;
     private double accumulator = 0;
 
     @Override
     public void create() {
-        
-        Locations location = new Locations(1, 5, 15);
+
+        Location location = new Location(1, 8, 15);
         location.generate();
 
         Gdx.graphics.setVSync(false);
 
         Tiles.register();
         this.renderWorld = new RenderWorld();
-
+        this.debug = new Debug();
         this.batch = new SpriteBatch();
         this.town = new Town();
         ENTITYPLAYER = new EntityPlayer();
-        ENTITYPLAYER.setWorld(this.town);
+        ENTITYPLAYER.setWorld(location);
 
-        this.font = new BitmapFont(Gdx.files.internal("assets/ld44/textures/fonts/pixel_operator.fnt"), true);
+        FONT = new BitmapFont(Gdx.files.internal("assets/ld44/textures/fonts/pixel_operator.fnt"), true);
 
-        // Creates the OrthographicCamera
         this.camera = new OrthographicCamera();
         resetCamera();
 
-
         Gdx.input.setInputProcessor(new InputHandler());
-
-        debugRenderer = new ShapeRenderer();
     }
-    
+
     public void updateLogic(double delta) {
-
+        ENTITYPLAYER.update(delta);
     }
-    
+
     @Override
     public void render() {
 
         double currentTime = TimeUtils.millis() / 1000.0;
         double frameTime = Math.min(currentTime - prevTime, 0.25);
-        
+
         prevTime = currentTime;
         accumulator += frameTime;
-        
+
         while (accumulator >= STEP) {
-            
+
             accumulator -= STEP;
             updateLogic(frameTime);
+            DELTA = frameTime;
         }
-        
-        ENTITYPLAYER.update();
 
-        this.renderDelta = Gdx.graphics.getDeltaTime() * 1000f;
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         this.camera.update();
         this.batch.setProjectionMatrix(camera.combined);
         this.renderWorld.render(this.batch, ENTITYPLAYER.getTileMap());
 
-        Gdx.gl.glLineWidth(4);
-        debugRenderer.setProjectionMatrix(this.camera.combined);
-        debugRenderer.begin(ShapeRenderer.ShapeType.Line);
-        debugRenderer.setColor(Color.WHITE);
-        debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f - 2f, Gdx.graphics.getHeight() / 2.0f - 32.0f), new Vector2(Gdx.graphics.getWidth() / 2.0f - 2f, Gdx.graphics.getHeight() / 2.0f + 32.0f));
-        debugRenderer.line(new Vector2(Gdx.graphics.getWidth() / 2.0f - 32.0f, Gdx.graphics.getHeight() / 2.0f - 2f), new Vector2(Gdx.graphics.getWidth() / 2.0f + 32.0f, Gdx.graphics.getHeight() / 2.0f - 2f));
-        debugRenderer.end();
-        Gdx.gl.glLineWidth(1);
-
-        this.batch.begin();
-        int lineNum = 1;
-
-        for (String line : generateDebugInfo()) {
-
-            this.font.draw(this.batch, line, 10, this.font.getLineHeight() * lineNum);
-            lineNum++;
-        }
-
-        this.batch.end();
+        this.debug.drawCrosshair(this.camera);
+        this.debug.drawDebugStats(this.batch);
     }
 
-    private final List<String> debugInfo = new ArrayList<String>();
-
-    public List<String> generateDebugInfo() {
-        debugInfo.clear();
-        debugInfo.add("FPS: " + Gdx.graphics.getFramesPerSecond());
-        debugInfo.add("Ram: " + (Gdx.app.getJavaHeap() / 1024f / 1024f) + " Mb");
-        debugInfo.add("Delta: " + this.renderDelta);
-        return debugInfo;
-    }
 
     @Override
     public void resize(int width, int height) {

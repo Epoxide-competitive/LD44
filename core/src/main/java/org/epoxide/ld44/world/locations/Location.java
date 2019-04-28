@@ -8,13 +8,13 @@ import org.epoxide.ld44.world.World;
 
 import java.util.List;
 
-public class Locations extends World {
+public class Location extends World {
 
     private final int minRooms;
     private final int maxRooms;
     private TileMap tileMap;
 
-    public Locations(int floorCount, int minRooms, int maxRooms) {
+    public Location(int floorCount, int minRooms, int maxRooms) {
         super(floorCount);
         this.minRooms = minRooms;
         this.maxRooms = maxRooms;
@@ -51,7 +51,10 @@ public class Locations extends World {
         for (DungeonRoom room : roomList) {
             for (int x = 0; x < room.getWidth(); x++) {
                 for (int y = 0; y < room.getHeight(); y++) {
-                    tileMap.setTile(x + room.getX(), y + room.getY(), Tiles.STONE_BRICKS);
+                    if (x == 0 || y == 0 || x == room.getWidth() - 1 || y == room.getHeight() - 1)
+                        tileMap.setTile(x + room.getX(), y + room.getY(), Tiles.STONE_BRICKS);
+                    else
+                        tileMap.setTile(x + room.getX(), y + room.getY(), Tiles.STONE);
                 }
             }
         }

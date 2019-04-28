@@ -9,16 +9,22 @@ import org.epoxide.ld44.client.tile.Quad;
 import org.epoxide.ld44.registry.Identifier;
 import org.epoxide.ld44.registry.Registerable;
 
+import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 
 public class Tile extends Registerable<Tile> {
 
+    protected Rectangle boundingBox = new Rectangle(0, 0, 1, 1);
     private List<Quad> quads;
 
     public Tile(String id) {
 
         this.setIdentifier(new Identifier(id));
+    }
+
+    public Rectangle getBoundingBox() {
+        return boundingBox;
     }
 
     public void registerTextures(PixmapPacker packer) {

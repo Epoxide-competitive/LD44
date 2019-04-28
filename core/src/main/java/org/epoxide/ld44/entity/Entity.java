@@ -18,7 +18,7 @@ public class Entity {
 
     }
 
-    public void update() {
+    public void update(double delta) {
 
     }
 

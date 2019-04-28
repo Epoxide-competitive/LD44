@@ -1,6 +1,7 @@
 package org.epoxide.ld44.client.world;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.epoxide.ld44.LD44;
 import org.epoxide.ld44.client.tile.Quad;
@@ -28,12 +29,19 @@ public class RenderWorld {
         batch.begin();
         for (int x = 0; x < tileMap.getWidth(); x++) {
             for (int y = 0; y < tileMap.getHeight(); y++) {
+
+                float renderX = (x - LD44.ENTITYPLAYER.getX() + offsetWidth) * TILE_SIZE;
+                float renderY = (y - LD44.ENTITYPLAYER.getY() + offsetHeight) * TILE_SIZE;
+
+                if (renderX + TILE_SIZE < 0 || renderY + TILE_SIZE < 0 || renderX > Gdx.graphics.getWidth() || renderY > Gdx.graphics.getHeight())
+                    continue;
+
                 List<Quad> quads = tileMap.getTile(x, y).getQuads(tileMap, x, y);
                 for (Quad quad : quads) {
                     if (LD44.EDITOR && LD44.EDITOR_X == x && LD44.EDITOR_Y == y)
-                        quad.render(batch, (x - LD44.ENTITYPLAYER.getX() + offsetWidth) * TILE_SIZE, (y - LD44.ENTITYPLAYER.getY() + offsetHeight) * TILE_SIZE, TILE_SIZE, TILE_SIZE, batch.getColor().LIGHT_GRAY.toFloatBits());
+                        quad.render(batch, renderX, renderY, TILE_SIZE, TILE_SIZE, Color.LIGHT_GRAY.toFloatBits());
                     else
-                        quad.render(batch, (x - LD44.ENTITYPLAYER.getX() + offsetWidth) * TILE_SIZE, (y - LD44.ENTITYPLAYER.getY() + offsetHeight) * TILE_SIZE, TILE_SIZE);
+                        quad.render(batch, renderX, renderY, TILE_SIZE);
                 }
             }
         }

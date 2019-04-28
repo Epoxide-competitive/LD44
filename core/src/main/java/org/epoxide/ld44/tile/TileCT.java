@@ -3,15 +3,22 @@ package org.epoxide.ld44.tile;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import org.epoxide.ld44.utilities.Direction;
 import org.epoxide.ld44.client.tile.Quad;
 import org.epoxide.ld44.client.tile.ScaledQuad;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 public class TileCT extends Tile {
 
+    private final int[] ret = new int[]{18, 19, 17, 16};
+    private final int[] submapOffsets = {4, 5, 1, 0};
     private Quad[] quadMap = new Quad[20];
+    private Map<Direction, Boolean> connected = new HashMap<Direction, Boolean>();
+    private List<Quad> quadList = new LinkedList<Quad>();
 
     public TileCT(String id) {
         super(id);
@@ -39,73 +46,41 @@ public class TileCT extends Tile {
         quadMap[17] = new ScaledQuad(baseTile[0][1], 0.5f, 0f, 0.5f, 0.5f);
         quadMap[18] = new ScaledQuad(baseTile[1][0], 0, 0.5f, 0.5f, 0.5f);
         quadMap[19] = new ScaledQuad(baseTile[1][1], 0.5f, 0.5f, 0.5f, 0.5f);
+
+
     }
 
     public List<Quad> getQuads(TileMap tileMap, int x, int y) {
-
-        List<Quad> quadList = new LinkedList<Quad>();
-
-
-        boolean[] connected = new boolean[4];
-        for (int i = 0; i < 4; i++) {
-            switch (i) {
-                case 0:
-                    connected[0] = tileMap.getTile(x, y + 1) == this;
-                    break;
-                case 1:
-                    connected[1] = tileMap.getTile(x, y - 1) == this;
-                    break;
-                case 2:
-                    connected[2] = tileMap.getTile(x - 1, y) == this;
-                    break;
-                case 3:
-                    connected[3] = tileMap.getTile(x + 1, y) == this;
-                    break;
-            }
-        }
-
+        quadList.clear();
+        connected.clear();
         boolean all = true;
-        for (boolean b : connected) {
+
+        for (Direction direction : Direction.mainDirections()) {
+            boolean b = tileMap.getTile(x + direction.getX(), y + direction.getY()) == this;
+            connected.put(direction, b);
             if (!b) {
                 all = false;
-                break;
             }
         }
-
-        int[] ret = new int[]{18, 19, 17, 16};
-
-        int[] submapOffsets = {4, 5, 1, 0};
+        Direction[][] submap = new Direction[][]{
+                {Direction.SOUTH, Direction.WEST},
+                {Direction.SOUTH, Direction.EAST},
+                {Direction.NORTH, Direction.EAST},
+                {Direction.NORTH, Direction.WEST}
+        };
 
         for (int i = 0; i < 4; i++) {
+            int idx = submapOffsets[i];
+
             if (all) {
-                quadList.add(this.quadMap[submapOffsets[i]]);
+                quadList.add(this.quadMap[idx]);
             } else {
-                switch (i) {
-                    case 0:
-                        if (connected[0] || connected[2])
-                            quadList.add(this.quadMap[submapOffsets[i] + (connected[0] ? 2 : 0) + (connected[2] ? 8 : 0)]);
-                        else
-                            quadList.add(this.quadMap[ret[i]]);
-                        break;
-                    case 1:
-                        if (connected[0] || connected[3])
-                            quadList.add(this.quadMap[submapOffsets[i] + (connected[0] ? 2 : 0) + (connected[3] ? 8 : 0)]);
-                        else
-                            quadList.add(this.quadMap[ret[i]]);
-                        break;
-                    case 2:
-                        if (connected[1] || connected[3])
-                            quadList.add(this.quadMap[submapOffsets[i] + (connected[1] ? 2 : 0) + (connected[3] ? 8 : 0)]);
-                        else
-                            quadList.add(this.quadMap[ret[i]]);
-                        break;
-                    case 3:
-                        if (connected[1] || connected[2])
-                            quadList.add(this.quadMap[submapOffsets[i] + (connected[1] ? 2 : 0) + (connected[2] ? 8 : 0)]);
-                        else
-                            quadList.add(this.quadMap[ret[i]]);
-                        break;
-                }
+                Direction[] dir = submap[i];
+                if (connected.get(dir[0]) || connected.get(dir[1]))
+                    quadList.add(this.quadMap[idx + (connected.get(dir[0]) ? 2 : 0) + (connected.get(dir[1]) ? 8 : 0)]);
+                else
+                    quadList.add(this.quadMap[ret[i]]);
+
             }
         }
 
