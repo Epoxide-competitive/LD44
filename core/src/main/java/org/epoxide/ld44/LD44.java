@@ -55,7 +55,7 @@ public class LD44 extends ApplicationAdapter {
         this.batch = new SpriteBatch();
         this.town = new Town();
         ENTITYPLAYER = new EntityPlayer();
-        ENTITYPLAYER.setWorld(location);
+        ENTITYPLAYER.setWorld(this.town);
 
         this.font = new BitmapFont(true);
 

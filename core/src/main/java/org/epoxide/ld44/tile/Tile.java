@@ -1,16 +1,20 @@
 package org.epoxide.ld44.tile;
 
-import org.epoxide.ld44.client.tile.Quad;
-import org.epoxide.ld44.registry.Identifier;
-import org.epoxide.ld44.registry.Registerable;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import org.epoxide.ld44.client.tile.Quad;
+import org.epoxide.ld44.registry.Identifier;
+import org.epoxide.ld44.registry.Registerable;
+
+import java.util.Collections;
+import java.util.List;
 
 public class Tile extends Registerable<Tile> {
+
+    private List<Quad> quads;
 
     public Tile(String id) {
 
@@ -19,24 +23,22 @@ public class Tile extends Registerable<Tile> {
 
     public void registerTextures(PixmapPacker packer) {
 
-        packer.pack(this.getIdentifier().toString(), getTileSpriteData());
+        packer.pack(this.getIdentifier().toString(), getTileSpriteData(this.getIdentifier().getName()));
     }
-
-    private Quad quad;
 
     public void retrieveQuads(TextureAtlas atlas) {
 
-        quad = new Quad(atlas.findRegion(this.getIdentifier().toString()));
+        this.quads = Collections.singletonList(new Quad(atlas.findRegion(this.getIdentifier().toString())));
     }
 
-    public Quad getQuad(int x, int y) {
+    public List<Quad> getQuads(TileMap tileMap, int x, int y) {
 
-        return quad;
+        return this.quads;
     }
 
-    private Pixmap getTileSpriteData() {
+    protected Pixmap getTileSpriteData(String name) {
 
-        FileHandle file = Gdx.files.internal("assets/" + this.getIdentifier().getDomain() + "/textures/tiles/" + this.getIdentifier().getName() + ".png");
+        FileHandle file = Gdx.files.internal("assets/" + this.getIdentifier().getDomain() + "/textures/tiles/" + name + ".png");
 
         if (!file.exists()) {
 
