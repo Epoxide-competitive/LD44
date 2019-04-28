@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.TimeUtils;
+
 import org.epoxide.ld44.client.world.RenderWorld;
 import org.epoxide.ld44.entity.EntityPlayer;
 import org.epoxide.ld44.input.InputHandler;
@@ -34,9 +36,14 @@ public class LD44 extends ApplicationAdapter {
     private float renderDelta = 0f;
     private RenderWorld renderWorld;
     private ShapeRenderer debugRenderer;
+    
+    private static final double STEP = 1d / 20d;
+    private double prevTime;
+    private double accumulator = 0;
 
     @Override
     public void create() {
+        
         Locations location = new Locations(1, 5, 15);
         location.generate();
 
@@ -61,10 +68,26 @@ public class LD44 extends ApplicationAdapter {
 
         debugRenderer = new ShapeRenderer();
     }
+    
+    public void updateLogic(double delta) {
 
+    }
+    
     @Override
     public void render() {
 
+        double currentTime = TimeUtils.millis() / 1000.0;
+        double frameTime = Math.min(currentTime - prevTime, 0.25);
+        
+        prevTime = currentTime;
+        accumulator += frameTime;
+        
+        while (accumulator >= STEP) {
+            
+            accumulator -= STEP;
+            updateLogic(frameTime);
+        }
+        
         ENTITYPLAYER.update();
 
         this.renderDelta = Gdx.graphics.getDeltaTime() * 1000f;
