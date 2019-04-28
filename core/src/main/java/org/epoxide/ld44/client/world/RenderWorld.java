@@ -30,8 +30,8 @@ public class RenderWorld {
         for (int x = 0; x < tileMap.getWidth(); x++) {
             for (int y = 0; y < tileMap.getHeight(); y++) {
 
-                float renderX = (x - LD44.ENTITYPLAYER.getX() + offsetWidth) * TILE_SIZE;
-                float renderY = (y - LD44.ENTITYPLAYER.getY() + offsetHeight) * TILE_SIZE;
+                float renderX = (x - LD44.getInstance().getClientPlayer().getX() + offsetWidth) * TILE_SIZE;
+                float renderY = (y - LD44.getInstance().getClientPlayer().getY() + offsetHeight) * TILE_SIZE;
 
                 if (renderX + TILE_SIZE < 0 || renderY + TILE_SIZE < 0 || renderX > Gdx.graphics.getWidth() || renderY > Gdx.graphics.getHeight())
                     continue;

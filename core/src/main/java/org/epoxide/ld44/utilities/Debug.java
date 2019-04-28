@@ -42,7 +42,7 @@ public class Debug {
         int lineNum = 1;
         for (String line : generateDebugInfo()) {
 
-            LD44.FONT.draw(batch, line, 10, LD44.FONT.getLineHeight() * lineNum);
+            LD44.getInstance().getFont().draw(batch, line, 10, LD44.getInstance().getFont().getLineHeight() * lineNum);
             lineNum++;
         }
         batch.end();

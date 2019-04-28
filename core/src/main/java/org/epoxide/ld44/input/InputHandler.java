@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import org.epoxide.ld44.LD44;
+import org.epoxide.ld44.client.gui.Gui;
+import org.epoxide.ld44.entity.EntityPlayer;
 import org.epoxide.ld44.tile.Tile;
 import org.epoxide.ld44.tile.TileMap;
 import org.epoxide.ld44.tile.Tiles;
@@ -16,18 +18,22 @@ public class InputHandler extends InputAdapter {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        if (LD44.CURRENT_GUI != null) {
-            LD44.CURRENT_GUI.touchDown(screenX, screenY, pointer, button);
+        
+        LD44 game = LD44.getInstance();
+        Gui gui = game.getCurrentGUI();
+        
+        if (gui != null) {
+            gui.touchDown(screenX, screenY, pointer, button);
         } else if (LD44.EDITOR) {
-            TileMap tileMap = LD44.ENTITYPLAYER.getTileMap();
+            TileMap tileMap = game.getClientPlayer().getTileMap();
             float width = Gdx.graphics.getWidth() / TILE_SIZE;
             float height = Gdx.graphics.getHeight() / TILE_SIZE;
 
             float offsetWidth = width / 2.0f - 0.5f;
             float offsetHeight = height / 2.0f - 0.5f;
 
-            int x = (int) ((screenX / TILE_SIZE + LD44.ENTITYPLAYER.getX()) - offsetWidth);
-            int y = (int) ((screenY / TILE_SIZE + LD44.ENTITYPLAYER.getY()) - offsetHeight);
+            int x = (int) ((screenX / TILE_SIZE + game.getClientPlayer().getX()) - offsetWidth);
+            int y = (int) ((screenY / TILE_SIZE + game.getClientPlayer().getY()) - offsetHeight);
             if (x >= 0 && x < tileMap.getWidth() && y >= 0 && y < tileMap.getHeight()) {
                 LD44.EDITOR_X = x;
                 LD44.EDITOR_Y = y;
@@ -38,8 +44,8 @@ public class InputHandler extends InputAdapter {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        if (LD44.CURRENT_GUI != null) {
-            LD44.CURRENT_GUI.mouseMoved(screenX, screenY);
+        if (LD44.getInstance().getCurrentGUI() != null) {
+            LD44.getInstance().getCurrentGUI().mouseMoved(screenX, screenY);
             return true;
         }
         return super.mouseMoved(screenX, screenY);
@@ -47,8 +53,8 @@ public class InputHandler extends InputAdapter {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (LD44.CURRENT_GUI != null) {
-            LD44.CURRENT_GUI.keyDown(keycode);
+        if (LD44.getInstance().getCurrentGUI() != null) {
+            LD44.getInstance().getCurrentGUI().keyDown(keycode);
             return true;
         }
         return super.keyDown(keycode);
@@ -56,27 +62,30 @@ public class InputHandler extends InputAdapter {
 
     @Override
     public boolean keyUp(int keycode) {
-        if (LD44.CURRENT_GUI != null) {
-            LD44.CURRENT_GUI.keyUp(keycode);
+        if (LD44.getInstance().getCurrentGUI() != null) {
+            LD44.getInstance().getCurrentGUI().keyUp(keycode);
             return true;
         }
+        
+        EntityPlayer player = LD44.getInstance().getClientPlayer();
+        
         switch (keycode) {
             case Input.Keys.W:
-                LD44.ENTITYPLAYER.setY(LD44.ENTITYPLAYER.getY() - 1);
+                player.setY(player.getY() - 1);
                 break;
             case Input.Keys.A:
-                LD44.ENTITYPLAYER.setX(LD44.ENTITYPLAYER.getX() - 1);
+                player.setX(player.getX() - 1);
                 break;
             case Input.Keys.S:
-                LD44.ENTITYPLAYER.setY(LD44.ENTITYPLAYER.getY() + 1);
+                player.setY(player.getY() + 1);
                 break;
             case Input.Keys.D:
-                LD44.ENTITYPLAYER.setX(LD44.ENTITYPLAYER.getX() + 1);
+                player.setX(player.getX() + 1);
                 break;
 
             case Input.Keys.TAB:
                 if (LD44.EDITOR) {
-                    Tile t = LD44.ENTITYPLAYER.getTileMap().getTile(LD44.EDITOR_X, LD44.EDITOR_Y);
+                    Tile t = player.getTileMap().getTile(LD44.EDITOR_X, LD44.EDITOR_Y);
                     List<Tile> l = Tiles.REGISTRY.getValues();
                     boolean isPressed = Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT);
                     int i = l.indexOf(t) + (isPressed ? -1 : 1);
@@ -84,7 +93,7 @@ public class InputHandler extends InputAdapter {
                         i = l.size();
                     if (i >= l.size())
                         i = 0;
-                    LD44.ENTITYPLAYER.getTileMap().setTile(LD44.EDITOR_X, LD44.EDITOR_Y, l.get(i));
+                    player.getTileMap().setTile(LD44.EDITOR_X, LD44.EDITOR_Y, l.get(i));
                 }
                 break;
         }

@@ -20,19 +20,18 @@ import org.epoxide.ld44.world.World;
 
 public class LD44 extends ApplicationAdapter {
 
+    private static LD44 instance;
+    
     public static final boolean EDITOR = true;
     public static int EDITOR_X;
     public static int EDITOR_Y;
-
-    public static BitmapFont FONT;
-    public static EntityPlayer ENTITYPLAYER;
-
     public static double DELTA = 0f;
-
-    public static Gui CURRENT_GUI;
-
-    private World currentWorld;
     public static OrthographicCamera CAMERA;
+    
+    private BitmapFont font;
+    private EntityPlayer clientPlayer;
+    private Gui currentGUI;
+    private World currentWorld;
     private SpriteBatch batch;
     private RenderWorld renderWorld;
 
@@ -45,20 +44,21 @@ public class LD44 extends ApplicationAdapter {
     @Override
     public void create() {
 
+        instance = this;
         Gdx.graphics.setVSync(false);
 
-        FONT = new BitmapFont(Gdx.files.internal("assets/ld44/textures/fonts/pixel_operator.fnt"), true);
+        font = new BitmapFont(Gdx.files.internal("assets/ld44/textures/fonts/pixel_operator.fnt"), true);
 
-        CURRENT_GUI = new GuiBountyBoard();
+        currentGUI = new GuiBountyBoard();
 
         Tiles.register();
         this.renderWorld = new RenderWorld();
         this.debug = new Debug();
         this.batch = new SpriteBatch();
         this.currentWorld = new Town();
-        ENTITYPLAYER = new EntityPlayer();
-        ENTITYPLAYER.setWorld(this.currentWorld);
-        this.currentWorld.addEntity(ENTITYPLAYER);
+        clientPlayer = new EntityPlayer();
+        clientPlayer.setWorld(this.currentWorld);
+        this.currentWorld.addEntity(clientPlayer);
 
         for (int i = 0; i < 5; i++) {
             
@@ -98,13 +98,13 @@ public class LD44 extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         CAMERA.update();
         this.batch.setProjectionMatrix(CAMERA.combined);
-        this.renderWorld.render(this.batch, ENTITYPLAYER.getTileMap());
+        this.renderWorld.render(this.batch, clientPlayer.getTileMap());
 
         this.debug.drawCrosshair();
         this.debug.drawDebugStats(this.batch);
 
-        if (CURRENT_GUI != null)
-            CURRENT_GUI.render(this.batch);
+        if (currentGUI != null)
+            currentGUI.render(this.batch);
     }
 
 
@@ -123,5 +123,55 @@ public class LD44 extends ApplicationAdapter {
     @Override
     public void dispose() {
         this.batch.dispose();
+    }
+
+    public static LD44 getInstance() {
+        
+        return LD44.instance;
+    }
+    
+    public BitmapFont getFont () {
+        
+        return font;
+    }
+
+    public EntityPlayer getClientPlayer () {
+        
+        return clientPlayer;
+    }
+
+    public Gui getCurrentGUI () {
+        
+        return currentGUI;
+    }
+
+    public World getCurrentWorld () {
+        
+        return currentWorld;
+    }
+
+    public SpriteBatch getBatch () {
+        
+        return batch;
+    }
+
+    public RenderWorld getRenderWorld () {
+        
+        return renderWorld;
+    }
+
+    public Debug getDebug () {
+        
+        return debug;
+    }
+
+    public double getPrevTime () {
+        
+        return prevTime;
+    }
+
+    public double getAccumulator () {
+        
+        return accumulator;
     }
 }
