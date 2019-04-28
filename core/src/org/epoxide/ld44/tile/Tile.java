@@ -9,6 +9,9 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.PixmapPacker;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import org.epoxide.ld44.world.World;
+
+import java.util.*;
 
 public class Tile extends Registerable<Tile> {
 
@@ -22,16 +25,16 @@ public class Tile extends Registerable<Tile> {
         packer.pack(this.getIdentifier().toString(), getTileSpriteData());
     }
     
-    private Quad quad;
+    private List<Quad> quads;
     
     public void retrieveQuads(TextureAtlas atlas) {
-        
-        quad = new Quad(atlas.findRegion(this.getIdentifier().toString()));
+    
+        quads = Collections.singletonList(new Quad(atlas.findRegion(this.getIdentifier().toString())));
     }
     
-    public Quad getQuad(int x, int y) {
+    public List<Quad> getQuads(TileMap tileMap, int x, int y) {
         
-        return quad;
+        return quads;
     }
     
     private Pixmap getTileSpriteData() {

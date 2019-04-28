@@ -10,6 +10,7 @@ public class Tiles {
     public static final Tile STONE_BRICKS = new Tile("ld44:stone_bricks");
     public static final Tile GRASS = new Tile("ld44:grass");
     public static final Tile PATH = new Tile("ld44:path");
+    public static final TileCT LAVA= new TileCT("ld44:lava");
     
     
     
@@ -19,6 +20,8 @@ public class Tiles {
         REGISTRY.registerValue(STONE_BRICKS);
         REGISTRY.registerValue(GRASS);
         REGISTRY.registerValue(PATH);
+        REGISTRY.registerValue(LAVA);
+    
     
     }
 }

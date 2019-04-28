@@ -1,58 +1,25 @@
 package org.epoxide.ld44.client.tile;
 
 import com.badlogic.gdx.graphics.g2d.*;
-import org.epoxide.ld44.client.world.RenderWorld;
 
 import static com.badlogic.gdx.graphics.g2d.Batch.*;
 
-public class Quad {
+public class ScaledQuad extends Quad {
     
-    protected static final int NUM_VERTICES = 20;
-    protected final TextureRegion texture;
-    protected final float[] vertices = new float[NUM_VERTICES];
+    private final float width;
+    private final float height;
     
-    public Quad(TextureRegion texture) {
-        
-        this.texture = texture;
+    public ScaledQuad(TextureRegion texture, float width, float height) {
+        super(texture);
+        this.width = width;
+        this.height = height;
         
         final float u1 = texture.getU();
         final float v1 = texture.getV();
         final float u2 = texture.getU2();
         final float v2 = texture.getV2();
         
-        this.vertices[U1] = u1;
-        this.vertices[V1] = v1;
-        
-        this.vertices[U2] = u1;
-        this.vertices[V2] = v2;
-        
-        this.vertices[U3] = u2;
-        this.vertices[V3] = v2;
-        
-        this.vertices[U4] = u2;
-        this.vertices[V4] = v1;
-        
-    
-    }
-    
-    public Quad setUV(float minU, float minV, float maxU, float maxV) {
-        minU = texture.getU() + (texture.getU2()*minU);
-        minV = texture.getV() + (texture.getV2()*minV);
-        maxU = texture.getU() + (texture.getU2()*maxU);
-        maxV = texture.getV() + (texture.getV2()*maxV);
-        
-        this.vertices[U1] = minU;
-        this.vertices[V1] = minV;
-        
-        this.vertices[U2] = minU;
-        this.vertices[V2] = maxV;
-        
-        this.vertices[U3] = maxU;
-        this.vertices[V3] = maxV;
-        
-        this.vertices[U4] = maxU;
-        this.vertices[V4] = minV;
-        return this;
+        setUV(texture.getRegionX()/texture.getTexture().getWidth(), texture.getRegionY()/texture.getTexture().getHeight(), texture.getRegionWidth()/texture.getTexture().getWidth(), texture.getRegionHeight()/texture.getTexture().getHeight());
     }
     
     public void render(SpriteBatch batch, float x, float y, float unitScale) {
@@ -67,8 +34,8 @@ public class Quad {
     
     public void render(SpriteBatch batch, float x, float y, float width, float height, float colorBits) {
         
-        final float x2 = x + width;
-        final float y2 = y + height;
+        final float x2 = x + (width * this.width);
+        final float y2 = y + (height * this.height);
         
         this.vertices[X1] = x;
         this.vertices[Y1] = y;

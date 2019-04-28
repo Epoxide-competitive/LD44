@@ -26,6 +26,9 @@ public class Town extends World {
         TileMap tileMap = this.getTileMaps()[0];
         for (int x = 0; x < tileMap.getWidth(); x++)
             for (int y = 0; y < tileMap.getHeight(); y++)
-                tileMap.setTile(x, y, Tiles.GRASS);
+                if(x*y%2!=0)
+                    tileMap.setTile(x, y, Tiles.LAVA);
+                else
+                    tileMap.setTile(x, y, Tiles.GRASS);
     }
 }
