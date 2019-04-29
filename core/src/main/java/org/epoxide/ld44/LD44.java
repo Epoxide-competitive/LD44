@@ -55,8 +55,8 @@ public class LD44 extends ApplicationAdapter {
         this.renderWorld = new RenderWorld();
         this.debug = new Debug();
         this.batch = new SpriteBatch();
-        this.currentWorld = new Town();
         clientPlayer = new EntityPlayer();
+        this.currentWorld = new Town();
         clientPlayer.setWorld(this.currentWorld);
         this.currentWorld.addEntity(clientPlayer);
 
@@ -144,7 +144,12 @@ public class LD44 extends ApplicationAdapter {
         
         return currentGUI;
     }
-
+    
+    
+    public void setCurrentGUI(Gui currentGUI) {
+        this.currentGUI = currentGUI;
+    }
+    
     public World getCurrentWorld () {
         
         return currentWorld;

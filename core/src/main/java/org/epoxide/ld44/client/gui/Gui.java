@@ -1,6 +1,7 @@
 package org.epoxide.ld44.client.gui;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import org.epoxide.ld44.LD44;
 import org.epoxide.ld44.client.gui.components.GuiComponent;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public abstract class Gui {
     }
 
     public void keyUp(int keycode) {
+        LD44.getInstance().setCurrentGUI(null);
     }
 
     public void keyDown(int keycode) {
