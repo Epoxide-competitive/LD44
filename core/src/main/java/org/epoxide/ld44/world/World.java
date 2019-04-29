@@ -34,7 +34,8 @@ public abstract class World {
     }
 
     public void addEntity(Entity entity) {
-        
+
+        entity.setWorld(this);
         this.entities.add(entity);
     }
     

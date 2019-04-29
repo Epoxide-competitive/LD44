@@ -21,13 +21,13 @@ import org.epoxide.ld44.world.World;
 public class LD44 extends ApplicationAdapter {
 
     private static LD44 instance;
-    
+
     public static final boolean EDITOR = true;
     public static int EDITOR_X;
     public static int EDITOR_Y;
     public static double DELTA = 0f;
     public static OrthographicCamera CAMERA;
-    
+
     private BitmapFont font;
     private EntityPlayer clientPlayer;
     private Gui currentGUI;
@@ -47,26 +47,25 @@ public class LD44 extends ApplicationAdapter {
         instance = this;
         Gdx.graphics.setVSync(false);
 
-        font = new BitmapFont(Gdx.files.internal("assets/ld44/textures/fonts/pixel_operator.fnt"), true);
+        this.font = new BitmapFont(Gdx.files.internal("assets/ld44/textures/fonts/pixel_operator.fnt"), true);
 
-        currentGUI = new GuiBountyBoard();
+        this.currentGUI = new GuiBountyBoard();
 
         Tiles.register();
         this.renderWorld = new RenderWorld();
         this.debug = new Debug();
         this.batch = new SpriteBatch();
-        clientPlayer = new EntityPlayer();
+        this.clientPlayer = new EntityPlayer();
         this.currentWorld = new Town();
-        clientPlayer.setWorld(this.currentWorld);
-        this.currentWorld.addEntity(clientPlayer);
+        this.currentWorld.addEntity(this.clientPlayer);
 
         for (int i = 0; i < 5; i++) {
-            
+
             EntityRat rat = new EntityRat();
             rat.setWorld(this.currentWorld);
             this.currentWorld.addEntity(rat);
         }
-        
+
         CAMERA = new OrthographicCamera();
         resetCamera();
 
@@ -82,14 +81,14 @@ public class LD44 extends ApplicationAdapter {
     public void render() {
 
         double currentTime = TimeUtils.millis() / 1000.0;
-        double frameTime = Math.min(currentTime - prevTime, 0.25);
+        double frameTime = Math.min(currentTime - this.prevTime, 0.25);
 
-        prevTime = currentTime;
-        accumulator += frameTime;
+        this.prevTime = currentTime;
+        this.accumulator += frameTime;
 
-        while (accumulator >= STEP) {
+        while (this.accumulator >= STEP) {
 
-            accumulator -= STEP;
+            this.accumulator -= STEP;
             updateLogic(frameTime);
             DELTA = frameTime;
         }
@@ -98,13 +97,13 @@ public class LD44 extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         CAMERA.update();
         this.batch.setProjectionMatrix(CAMERA.combined);
-        this.renderWorld.render(this.batch, clientPlayer.getTileMap());
+        this.renderWorld.render(this.batch, this.clientPlayer.getTileMap());
 
         this.debug.drawCrosshair();
         this.debug.drawDebugStats(this.batch);
 
-        if (currentGUI != null)
-            currentGUI.render(this.batch);
+        if (this.currentGUI != null)
+            this.currentGUI.render(this.batch);
     }
 
 
@@ -126,57 +125,57 @@ public class LD44 extends ApplicationAdapter {
     }
 
     public static LD44 getInstance() {
-        
+
         return LD44.instance;
     }
-    
-    public BitmapFont getFont () {
-        
-        return font;
+
+    public BitmapFont getFont() {
+
+        return this.font;
     }
 
-    public EntityPlayer getClientPlayer () {
-        
-        return clientPlayer;
+    public EntityPlayer getClientPlayer() {
+
+        return this.clientPlayer;
     }
 
-    public Gui getCurrentGUI () {
-        
-        return currentGUI;
+    public Gui getCurrentGUI() {
+
+        return this.currentGUI;
     }
-    
-    
+
+
     public void setCurrentGUI(Gui currentGUI) {
         this.currentGUI = currentGUI;
     }
-    
-    public World getCurrentWorld () {
-        
-        return currentWorld;
+
+    public World getCurrentWorld() {
+
+        return this.currentWorld;
     }
 
-    public SpriteBatch getBatch () {
-        
-        return batch;
+    public SpriteBatch getBatch() {
+
+        return this.batch;
     }
 
-    public RenderWorld getRenderWorld () {
-        
-        return renderWorld;
+    public RenderWorld getRenderWorld() {
+
+        return this.renderWorld;
     }
 
-    public Debug getDebug () {
-        
-        return debug;
+    public Debug getDebug() {
+
+        return this.debug;
     }
 
-    public double getPrevTime () {
-        
-        return prevTime;
+    public double getPrevTime() {
+
+        return this.prevTime;
     }
 
-    public double getAccumulator () {
-        
-        return accumulator;
+    public double getAccumulator() {
+
+        return this.accumulator;
     }
 }
